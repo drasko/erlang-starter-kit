@@ -1,0 +1,21 @@
+{application, esk,
+ [{description, "An OTP application"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {mod, { esk_app, []}},
+  {applications,
+   [kernel,
+    stdlib,
+    cowboy,
+    jsx,
+    erlpass,
+    lager,
+    couchbeam
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {maintainers, []},
+  {licenses, ["Apache 2.0"]},
+  {links, []}
+ ]}.
