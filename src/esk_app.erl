@@ -16,14 +16,14 @@
 
 start(_StartType, _StartArgs) ->
     {ok, Pid} = 'esk_sup':start_link(),
-	Routes = [ {
+    Routes = [{
         '_',
         [
             {"/status", esk_status, []},
             {"/user", esk_user, []},
             {"/login", esk_login, []}
         ]
-    } ],
+    }],
     Dispatch = cowboy_router:compile(Routes),
 
     TransOpts = [ {ip, {0,0,0,0}}, {port, 8089} ],

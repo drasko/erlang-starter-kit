@@ -10,7 +10,7 @@
     jsone,
     erlpass,
     lager,
-    couchbeam
+    epgsql
    ]},
   {env,[]},
   {modules, []},
