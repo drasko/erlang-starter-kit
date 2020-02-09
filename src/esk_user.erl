@@ -9,7 +9,6 @@ init(Req0, Opts) ->
 	{ok, Req, Opts}.
 
 maybe_user(<<"POST">>, true, Req0) ->
-    _ = lager:info("~s POST /user~n", [?MODULE_STRING]),
 	{ok, PostVals, Req} = cowboy_req:read_urlencoded_body(Req0),
 	_Username = proplists:get_value(<<"username">>, PostVals),
 	_Password = proplists:get_value(<<"password">>, PostVals),

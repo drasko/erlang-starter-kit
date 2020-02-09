@@ -15,7 +15,9 @@
 %%====================================================================
 
 start(_StartType, _StartArgs) ->
-    {ok, Pid} = 'esk_sup':start_link(),
+    {ok, Host} = inet:parse_address(os:getenv("ESK_HOST", "0.0.0.0")),
+    Port = list_to_integer(os:getenv("ESK_PORT", "8089")),
+
     Routes = [{
         '_',
         [
@@ -26,17 +28,16 @@ start(_StartType, _StartArgs) ->
     }],
     Dispatch = cowboy_router:compile(Routes),
 
-    TransOpts = [ {ip, {0,0,0,0}}, {port, 8089} ],
+    TransOpts = [{ip, Host}, {port, Port}],
 	ProtoOpts = #{env => #{dispatch => Dispatch}},
 
-	{ok, _} = cowboy:start_clear(esk_cowboy,
-		TransOpts, ProtoOpts),
+	{ok, _} = cowboy:start_clear(esk_http_listener, TransOpts, ProtoOpts),
 
-    {ok, Pid}.
+    esk_sup:start_link().
 
 %%--------------------------------------------------------------------
 stop(_State) ->
-    ok.
+	ok = cowboy:stop_listener(esk_http_listener).
 
 %%====================================================================
 %% Internal functions

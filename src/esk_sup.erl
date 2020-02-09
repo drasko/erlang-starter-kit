@@ -18,7 +18,7 @@
 %%====================================================================
 %% API functions
 %%====================================================================
-
+-spec start_link() -> {ok, pid()}.
 start_link() ->
     supervisor:start_link({local, ?SERVER}, ?MODULE, []).
 
@@ -27,8 +27,9 @@ start_link() ->
 %%====================================================================
 
 %% Child :: {Id,StartFunc,Restart,Shutdown,Type,Modules}
-init([]) ->
-    {ok, { {one_for_all, 0, 1}, []} }.
+init(_Args) ->
+    Procs = [],
+    {ok, { {one_for_one, 10, 10}, Procs} }.
 
 %%====================================================================
 %% Internal functions

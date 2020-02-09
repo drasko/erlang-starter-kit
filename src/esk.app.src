@@ -9,7 +9,6 @@
     cowboy,
     jsone,
     erlpass,
-    lager,
     epgsql
    ]},
   {env,[]},
