@@ -22,7 +22,7 @@ start(_StartType, _StartArgs) ->
         '_',
         [
             {"/status", esk_status, []},
-            {"/user", esk_user, []},
+            {"/users", esk_user, []},
             {"/login", esk_login, []}
         ]
     }],
