@@ -34,11 +34,20 @@ start_link() ->
 %%                  shutdown => shutdown(), % optional
 %%                  type => worker(),       % optional
 %%                  modules => modules()}   % optional
-init(_Args) ->
+init([]) ->
     SupFlags = #{strategy => one_for_all,
                  intensity => 0,
                  period => 1},
-    ChildSpecs = [],
+    
+
+    {ok, PoolsEnv} = application:get_env(pools),
+    [SizeArgs, WorkerArgs] = proplists:get_value(dbpool, PoolsEnv),
+    PoolArgs = [{name, {local, dbpool}}, {worker_module, esk_db_worker}],
+    PoolSpec = poolboy:child_spec(dbpool, PoolArgs ++ SizeArgs, WorkerArgs),
+
+    error_logger:info_msg("PoolSpec: ~p", [PoolSpec]),
+
+    ChildSpecs = [PoolSpec],
     {ok, {SupFlags, ChildSpecs}}.
 
 %%====================================================================

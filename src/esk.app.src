@@ -5,13 +5,25 @@
   {mod, { esk_app, []}},
   {applications,
    [kernel,
-    stdlib,
-    cowboy,
-    jsone,
-    erlpass,
-    epgsql
+    stdlib
    ]},
-  {env,[]},
+  {env, [
+        {cowboy, [
+            {host, "0.0.0.0"},
+            {port, 8089}
+        ]},
+        {pools, [
+            {dbpool, [
+                {size, 10},
+                {max_overflow, 20}
+			], [
+                {hostname, "127.0.0.1"},
+                {database, "zenith"},
+                {username, "drasko"},
+                {password, "Testera011"}
+            ]}
+        ]}
+    ]},
   {modules, []},
 
   {maintainers, []},
