@@ -51,7 +51,7 @@ start(_StartType, _StartArgs) ->
     Dispatch = cowboy_router:compile(Routes),
 
     TransOpts = [{ip, Host}, {port, Port}],
-	ProtoOpts = #{env => #{dispatch => Dispatch}},
+	ProtoOpts = #{env => #{dispatch => Dispatch}, middlewares => [cowboy_router, esk_http_log, cowboy_handler]},
 
 	{ok, _} = cowboy:start_clear(esk_http_listener, TransOpts, ProtoOpts),
     esk_sup:start_link().

@@ -21,7 +21,6 @@ init(Args) ->
     Pwd = proplists:get_value(password, Args),
     % Connection string example: "Driver=PostgreSQL ANSI;Server=localhost;Port=5432;Database=test;Uid=allibaba;Pwd=sesame"
     ConnStr = io_lib:format("Driver=~s;Server=~s;Port=~B;Database=~s;Uid=~s;Pwd=~s;", [Driver, Server, Port, Database, Uid, Pwd]),
-    io:format("Connection string: ~s~n", [ConnStr]),
     {ok, Conn} = odbc:connect(ConnStr, []),
     io:format("Connected to database~n"),
     {ok, #state{conn=Conn}}.
