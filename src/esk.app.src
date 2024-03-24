@@ -14,10 +14,12 @@
         ]},
         {pools, [
             {dbpool, [
-                {size, 10},
+                {size, 1},
                 {max_overflow, 20}
 			], [
+                {driver, "PostgreSQL ANSI"},
                 {hostname, "127.0.0.1"},
+                {port, 5432},
                 {database, "zenith"},
                 {username, "drasko"},
                 {password, "Testera011"}

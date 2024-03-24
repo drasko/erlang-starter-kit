@@ -33,11 +33,11 @@
 start(_StartType, _StartArgs) ->
     %% Retrieve Cowboy host and port from application environment
     {ok, CowboyEnv} = application:get_env(cowboy),
-    Host = proplists:get_value(host, CowboyEnv),
+    {ok, Host} = inet:parse_address(proplists:get_value(host, CowboyEnv)),
     Port = proplists:get_value(port, CowboyEnv),
 
-    % Cowboy
-    {ok, _} = application:ensure_all_started(cowboy),
+    {ok, _} = application:ensure_all_started(cowboy), % Start Cowboy
+    {ok, _} = application:ensure_all_started(odbc), % Start ODBC
 
     Routes = [{
         '_',
@@ -48,19 +48,12 @@ start(_StartType, _StartArgs) ->
             {"/users/:id/login", esk_users, []}
         ]
     }],
-
-    error_logger:info_msg("HERE1"),
     Dispatch = cowboy_router:compile(Routes),
 
     TransOpts = [{ip, Host}, {port, Port}],
 	ProtoOpts = #{env => #{dispatch => Dispatch}},
 
-    error_logger:info_msg("HERE2"),
-
 	{ok, _} = cowboy:start_clear(esk_http_listener, TransOpts, ProtoOpts),
-    
-    error_logger:info_msg("HERE3"),
-
     esk_sup:start_link().
 
 %%--------------------------------------------------------------------

@@ -40,14 +40,16 @@ init([]) ->
                  period => 1},
     
 
-    {ok, PoolsEnv} = application:get_env(pools),
-    [SizeArgs, WorkerArgs] = proplists:get_value(dbpool, PoolsEnv),
-    PoolArgs = [{name, {local, dbpool}}, {worker_module, esk_db_worker}],
-    PoolSpec = poolboy:child_spec(dbpool, PoolArgs ++ SizeArgs, WorkerArgs),
+    {ok, Pools} = application:get_env(esk, pools),
+    PoolSpecs = lists:map(fun({Name, SizeArgs, WorkerArgs}) ->
+        PoolArgs = [{name, {local, Name}},
+            		{worker_module, esk_db_worker}] ++ SizeArgs,
+        poolboy:child_spec(Name, PoolArgs, WorkerArgs)
+    end, Pools),
 
-    error_logger:info_msg("PoolSpec: ~p", [PoolSpec]),
+    %error_logger:info_msg("PoolSpec: ~p", [PoolSpecs]),
 
-    ChildSpecs = [PoolSpec],
+    ChildSpecs = PoolSpecs,
     {ok, {SupFlags, ChildSpecs}}.
 
 %%====================================================================
